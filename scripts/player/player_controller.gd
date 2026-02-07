@@ -72,12 +72,12 @@ func _physics_process(delta: float) -> void:
 
 func handle_standard_movement(delta: float) -> void:
 	# Handle Jump.
-	if Input.is_action_just_pressed("ui_accept") and is_on_floor():
+	if Input.is_action_just_pressed("jump") and is_on_floor():
 		velocity.y = jump_velocity
 		change_state(State.JUMP)
 
 	# Get input direction
-	var input_dir := Input.get_axis("ui_left", "ui_right")
+	var input_dir := Input.get_axis("move_left", "move_right")
 
 	# Handle horizontal movement
 	if input_dir != 0:
