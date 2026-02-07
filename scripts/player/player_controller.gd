@@ -21,6 +21,7 @@ enum State { IDLE, MOVE, JUMP, ATTACK, HURT, DEAD }
 @onready var sprite: Sprite3D = $Sprite3D
 @onready var interaction_ray: RayCast3D = $InteractionRay
 @onready var hitbox: Hitbox3D = $Hitbox3D
+@onready var interaction_prompt: Control = get_node_or_null("UI/InteractionPrompt")
 
 signal interaction_triggered(interactable: Node)
 signal state_changed(new_state: State)
@@ -67,8 +68,32 @@ func _physics_process(delta: float) -> void:
 	move_and_slide()
 
 	# Interaction check
+	update_interaction_ui()
 	if Input.is_action_just_pressed("interact"):
 		check_interaction()
+
+func update_interaction_ui() -> void:
+	if not interaction_prompt:
+		return
+
+	if interaction_ray.is_colliding():
+		var collider = interaction_ray.get_collider()
+		var interactable = _get_interactable(collider)
+		if interactable:
+			interaction_prompt.display("Press E to " + interactable.interact_text)
+		else:
+			interaction_prompt.dismiss()
+	else:
+		interaction_prompt.dismiss()
+
+func _get_interactable(collider: Node) -> Node:
+	if not collider:
+		return null
+	if collider.has_method("interact"):
+		return collider
+	elif collider.get_parent().has_method("interact"):
+		return collider.get_parent()
+	return null
 
 func handle_standard_movement(delta: float) -> void:
 	# Handle Jump.
@@ -122,12 +147,7 @@ func check_interaction() -> void:
 	if interaction_ray.is_colliding():
 		var collider = interaction_ray.get_collider()
 		if collider:
-			var interactable = null
-			if collider.has_method("interact"):
-				interactable = collider
-			elif collider.get_parent().has_method("interact"):
-				interactable = collider.get_parent()
-
+			var interactable = _get_interactable(collider)
 			if interactable:
 				interactable.interact()
 				interaction_triggered.emit(interactable)

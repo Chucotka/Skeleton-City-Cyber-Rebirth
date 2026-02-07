@@ -7,6 +7,10 @@
 [ext_resource type="Resource" path="res://resources/memories/first_memory.tres" id="5_mem_data"]
 [ext_resource type="Script" path="res://scripts/player/hitbox_3d.gd" id="6_hitbox"]
 [ext_resource type="Script" path="res://scripts/systems/i_damageable.gd" id="7_damageable"]
+[ext_resource type="PackedScene" path="res://scenes/ui/interaction_prompt.tscn" id="8_prompt"]
+[ext_resource type="PackedScene" path="res://scenes/ui/hacking_minigame.tscn" id="9_hacking"]
+[ext_resource type="Script" path="res://scripts/environment/hacking_terminal.gd" id="10_hack_term"]
+[ext_resource type="Script" path="res://scripts/environment/door.gd" id="11_door"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_1"]
 radius = 0.5
@@ -14,6 +18,12 @@ height = 2.0
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_2"]
 size = Vector3(1.5, 1, 1)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_3"]
+size = Vector3(1, 2, 1)
+
+[sub_resource type="BoxMesh" id="BoxMesh_1"]
+size = Vector3(1, 2, 1)
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_Dummy"]
 albedo_color = Color(0.5, 0.2, 0.2, 1)
@@ -66,12 +76,46 @@ script = ExtResource("6_hitbox")
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Player/Hitbox3D"]
 shape = SubResource("BoxShape3D_2")
 
+[node name="UI" type="CanvasLayer" parent="Player"]
+
+[node name="InteractionPrompt" parent="Player/UI" instance=ExtResource("8_prompt")]
+
 [node name="Terminal" parent="." instance=ExtResource("3_terminal")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8, 1, 0)
+
+[node name="HackingTerminal" type="StaticBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 12, 1, 0)
+script = ExtResource("10_hack_term")
+linked_object = NodePath("../HackedDoor")
+alarm_light = NodePath("AlarmLight")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="HackingTerminal"]
+shape = SubResource("BoxShape3D_3")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="HackingTerminal"]
+mesh = SubResource("BoxMesh_1")
+
+[node name="AlarmLight" type="OmniLight3D" parent="HackingTerminal"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.5, 0)
+light_color = Color(1, 1, 1, 1)
+light_energy = 0.0
+
+[node name="HackedDoor" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 15, 0, 0)
+script = ExtResource("11_door")
+
+[node name="DoorMesh" type="CSGBox3D" parent="HackedDoor"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.5, 0)
+use_collision = true
+size = Vector3(0.5, 5, 4)
 
 [node name="MemoryFragmentItem" parent="." instance=ExtResource("4_memory")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5, 1, 0)
 memory_data = ExtResource("5_mem_data")
+
+[node name="HackingUI" type="CanvasLayer" parent="."]
+
+[node name="HackingMinigame" parent="HackingUI" instance=ExtResource("9_hacking")]
 
 [node name="BrokenRobotDummy" type="CSGBox3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5, 1, 0)
