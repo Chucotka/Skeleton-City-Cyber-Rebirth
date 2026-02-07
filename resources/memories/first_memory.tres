@@ -1,0 +1,12 @@
+[gd_resource type="Resource" script_class="MemoryFragment" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scripts/resources/memory_fragment.gd" id="1_script"]
+
+[resource]
+script = ExtResource("1_script")
+memory_id = "mem_001"
+title = "The Lab Incident"
+description = "A flash of red lights and the sound of escaping steam. Someone was shouting."
+unlocks_skill = true
+skill_id = "dash"
+skill_description = "A rapid forward movement to dodge hazards."

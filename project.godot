@@ -6,6 +6,10 @@ config/name="Skeleton City: Cyber Rebirth"
 run/main_scene="res://scenes/levels/prologue_lab.tscn"
 config/features=PackedStringArray("4.0", "Forward Plus")
 
+[autoload]
+
+MemoryManager="*res://scripts/systems/memory_manager.gd"
+
 [display]
 
 window/size/viewport_width=1280

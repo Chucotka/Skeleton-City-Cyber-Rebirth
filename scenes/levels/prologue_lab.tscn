@@ -3,6 +3,8 @@
 [ext_resource type="Environment" path="res://resources/environment.tres" id="1_env"]
 [ext_resource type="Script" path="res://scripts/player/player_controller.gd" id="2_player"]
 [ext_resource type="PackedScene" path="res://scenes/prefabs/terminal.tscn" id="3_terminal"]
+[ext_resource type="PackedScene" path="res://scenes/prefabs/memory_fragment_item.tscn" id="4_memory"]
+[ext_resource type="Resource" path="res://resources/memories/first_memory.tres" id="5_mem_data"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_1"]
 radius = 0.5
@@ -41,12 +43,18 @@ shape = SubResource("CapsuleShape3D_1")
 
 [node name="Sprite3D" type="Sprite3D" parent="Player"]
 billboard = 2
+shaded = true
+alpha_cut = 1
 
 [node name="InteractionRay" type="RayCast3D" parent="Player"]
 target_position = Vector3(2, 0, 0)
 
 [node name="Terminal" parent="." instance=ExtResource("3_terminal")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8, 1, 0)
+
+[node name="MemoryFragmentItem" parent="." instance=ExtResource("4_memory")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5, 1, 0)
+memory_data = ExtResource("5_mem_data")
 
 [node name="Camera3D" type="Camera3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 0.965926, 0.258819, 0, -0.258819, 0.965926, 0, 3, 8)
