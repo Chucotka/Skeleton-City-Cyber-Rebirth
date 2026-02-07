@@ -14,6 +14,16 @@ This project is a technical foundation for an HD-2D side-scrolling game built in
 4.  Once the project opens, press **F5** (or the Play button in the top right) to run the main scene.
 5.  The main scene is `res://scenes/levels/prologue_lab.tscn`.
 
+## macOS Specific Instructions
+
+### Running the Project
+*   If you are on a Mac with a **Retina Display**, the project is configured with `allow_hi_dpi` enabled to ensure crisp visuals.
+*   If you receive a security warning when running an exported build, right-click (or Control-click) the `.app` file and select **Open**.
+
+### Exporting for macOS
+*   An export preset for macOS has been included in `export_presets.cfg`.
+*   To export, go to **Project > Export...**, select the macOS preset, and click **Export Project**.
+
 ## Controls
 
 *   **Move Left:** `A` or `Left Arrow`
