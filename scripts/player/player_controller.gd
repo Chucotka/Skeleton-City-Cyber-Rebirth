@@ -1,7 +1,7 @@
 extends CharacterBody3D
 
 ## HD-2D Player Controller for Skeleton City: Cyber Rebirth
-## Handles 2D movement in a 3D environment.
+## Handles 2D movement in a 3D environment for the Mechanized Skeleton protagonist.
 
 @export_group("Movement")
 @export var speed: float = 5.0
@@ -14,6 +14,8 @@ extends CharacterBody3D
 
 @onready var sprite: Sprite3D = $Sprite3D
 @onready var interaction_ray: RayCast3D = $InteractionRay
+
+signal interaction_triggered(interactable: Node)
 
 # Get the gravity from the project settings to be synced with RigidBody nodes.
 var gravity: float = ProjectSettings.get_setting("physics/3d/default_gravity")
@@ -66,6 +68,7 @@ func check_interaction() -> void:
 
 			if interactable:
 				interactable.interact()
+				interaction_triggered.emit(interactable)
 				print("Interacted with: ", interactable.name)
 			else:
 				print("Object in range but not interactable: ", collider.name)

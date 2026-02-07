@@ -9,6 +9,6 @@ ssil_enabled = true
 sdfgi_enabled = true
 glow_enabled = true
 volumetric_fog_enabled = true
-volumetric_fog_density = 0.05
+volumetric_fog_density = 0.1
 volumetric_fog_albedo = Color(0.1, 0.1, 0.15, 1)
 volumetric_fog_emission = Color(0.05, 0.05, 0.1, 1)
