@@ -12,10 +12,11 @@ enum State { IDLE, MOVE, JUMP, ATTACK, HURT, DEAD }
 
 # --- Export Variables ---
 @export_group("Movement Parameters")
-@export var speed: float = 8.0
-@export var acceleration: float = 40.0
-@export var friction: float = 30.0
-@export var jump_velocity: float = 12.0
+@export var speed: float = 7.0
+@export var acceleration: float = 100.0
+@export var friction: float = 80.0
+@export var jump_velocity: float = 11.0
+@export var gravity: float = 30.0
 
 @export_group("Combat & Interaction")
 @export var attack_duration: float = 0.4
@@ -23,17 +24,18 @@ enum State { IDLE, MOVE, JUMP, ATTACK, HURT, DEAD }
 
 @export_group("Node References")
 @export var sprite_path: NodePath = "Sprite3D"
+@export var animation_player_path: NodePath = "AnimationPlayer"
 @export var ray_path: NodePath = "InteractionRay"
 @export var hitbox_path: NodePath = "Hitbox3D"
 
 # --- Onready Variables ---
 @onready var sprite: Sprite3D = get_node_or_null(sprite_path)
+@onready var anim_player: AnimationPlayer = get_node_or_null(animation_player_path)
 @onready var interaction_ray: RayCast3D = get_node_or_null(ray_path)
 @onready var hitbox: Hitbox3D = get_node_or_null(hitbox_path)
 @onready var interaction_prompt: Control = get_node_or_null("UI/InteractionPrompt")
 
 # --- Internal Variables ---
-var gravity: float = ProjectSettings.get_setting("physics/3d/default_gravity")
 var current_state: State = State.IDLE
 var attack_timer: float = 0.0
 
@@ -57,13 +59,14 @@ func _physics_process(delta: float) -> void:
 		_:
 			_handle_movement_state(delta)
 
-	# Enforce 2D plane safety
+	# Enforce 2D plane safety (Z-Lock)
 	velocity.z = 0
 	global_position.z = 0
 
 	move_and_slide()
 
 	_update_interactions()
+	_update_animation()
 
 # --- Internal Methods ---
 
@@ -134,6 +137,27 @@ func _change_state(new_state: State) -> void:
 		return
 	current_state = new_state
 	state_changed.emit(current_state)
+
+func _update_animation() -> void:
+	if not anim_player:
+		return
+
+	match current_state:
+		State.IDLE:
+			anim_player.play("idle")
+		State.MOVE:
+			anim_player.play("run")
+		State.JUMP:
+			if velocity.y > 0:
+				anim_player.play("jump")
+			else:
+				anim_player.play("fall")
+		State.ATTACK:
+			anim_player.play("attack")
+		State.HURT:
+			anim_player.play("hurt")
+		State.DEAD:
+			anim_player.play("dead")
 
 func _update_interactions() -> void:
 	if not interaction_ray:

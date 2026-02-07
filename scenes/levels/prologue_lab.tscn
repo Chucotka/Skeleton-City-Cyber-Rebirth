@@ -12,6 +12,7 @@
 [ext_resource type="Script" path="res://scripts/environment/hacking_terminal.gd" id="10_hack_term"]
 [ext_resource type="Script" path="res://scripts/environment/door.gd" id="11_door"]
 [ext_resource type="Script" path="res://scripts/systems/camera_follow.gd" id="12_cam"]
+[ext_resource type="Texture2D" path="res://assets/sprites/skeleton.png" id="13_skeleton"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_1"]
 radius = 0.5
@@ -65,6 +66,11 @@ shape = SubResource("CapsuleShape3D_1")
 billboard = 2
 shaded = true
 alpha_cut = 1
+texture = ExtResource("13_skeleton")
+hframes = 8
+vframes = 8
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="Player"]
 
 [node name="InteractionRay" type="RayCast3D" parent="Player"]
 target_position = Vector3(2, 0, 0)
