@@ -5,10 +5,19 @@
 [ext_resource type="PackedScene" path="res://scenes/prefabs/terminal.tscn" id="3_terminal"]
 [ext_resource type="PackedScene" path="res://scenes/prefabs/memory_fragment_item.tscn" id="4_memory"]
 [ext_resource type="Resource" path="res://resources/memories/first_memory.tres" id="5_mem_data"]
+[ext_resource type="Script" path="res://scripts/player/hitbox_3d.gd" id="6_hitbox"]
+[ext_resource type="Script" path="res://scripts/systems/i_damageable.gd" id="7_damageable"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_1"]
 radius = 0.5
 height = 2.0
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_2"]
+size = Vector3(1.5, 1, 1)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_Dummy"]
+albedo_color = Color(0.5, 0.2, 0.2, 1)
+roughness = 0.8
 
 [node name="PrologueLab" type="Node3D"]
 
@@ -49,12 +58,29 @@ alpha_cut = 1
 [node name="InteractionRay" type="RayCast3D" parent="Player"]
 target_position = Vector3(2, 0, 0)
 
+[node name="Hitbox3D" type="Area3D" parent="Player"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1, 1, 0)
+monitoring = false
+script = ExtResource("6_hitbox")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Player/Hitbox3D"]
+shape = SubResource("BoxShape3D_2")
+
 [node name="Terminal" parent="." instance=ExtResource("3_terminal")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8, 1, 0)
 
 [node name="MemoryFragmentItem" parent="." instance=ExtResource("4_memory")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5, 1, 0)
 memory_data = ExtResource("5_mem_data")
+
+[node name="BrokenRobotDummy" type="CSGBox3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5, 1, 0)
+use_collision = true
+size = Vector3(1, 2, 1)
+material = SubResource("StandardMaterial3D_Dummy")
+
+[node name="IDamageable" type="Node" parent="BrokenRobotDummy"]
+script = ExtResource("7_damageable")
 
 [node name="Camera3D" type="Camera3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 0.965926, 0.258819, 0, -0.258819, 0.965926, 0, 3, 8)
