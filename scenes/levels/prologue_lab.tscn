@@ -11,6 +11,7 @@
 [ext_resource type="PackedScene" path="res://scenes/ui/hacking_minigame.tscn" id="9_hacking"]
 [ext_resource type="Script" path="res://scripts/environment/hacking_terminal.gd" id="10_hack_term"]
 [ext_resource type="Script" path="res://scripts/environment/door.gd" id="11_door"]
+[ext_resource type="Script" path="res://scripts/systems/camera_follow.gd" id="12_cam"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_1"]
 radius = 0.5
@@ -130,3 +131,7 @@ script = ExtResource("7_damageable")
 transform = Transform3D(1, 0, 0, 0, 0.965926, 0.258819, 0, -0.258819, 0.965926, 0, 3, 8)
 current = true
 fov = 40.0
+script = ExtResource("12_cam")
+target_path = NodePath("../Player")
+smooth_speed = 5.0
+offset = Vector3(0, 3, 8)
